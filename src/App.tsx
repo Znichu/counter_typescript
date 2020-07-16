@@ -1,26 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {connect} from "react-redux";
+import {RootState} from "./bll/store";
+import {getCounterValue, setDecrementCounter, setIncrementCounter, setResetCounter} from "./bll/counter_reducer";
+import {Counter} from "./ui/Counter/Counter";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type MapStateProps = {
+  counter: number
+}
+type MapDispatchProps = {
+    setIncrementCounter: (value: number) => void
+    setDecrementCounter: (value: number) => void
+    setResetCounter: (value: number) => void
+    getCounterValue: () => void
+}
+type Props = MapStateProps & MapDispatchProps
+
+class App extends React.Component<Props> {
+
+    componentDidMount(): void {
+        this.props.getCounterValue();
+    }
+
+    render() {
+
+        let { counter, setIncrementCounter, setDecrementCounter, getCounterValue, setResetCounter } = this.props;
+
+        return (
+            <div className="App">
+                <Counter setIncrementCounter={ setIncrementCounter }
+                         setDecrementCounter={ setDecrementCounter }
+                         getCounterValue={ getCounterValue }
+                         setResetCounter={ setResetCounter }
+                         counter={ counter }/>
+            </div>
+        );
+    }
 }
 
-export default App;
+let mapStateToProps = (state: RootState) => ({
+  counter: state.counter.value
+})
+
+export default connect(mapStateToProps, {getCounterValue, setIncrementCounter, setDecrementCounter, setResetCounter}) (App);

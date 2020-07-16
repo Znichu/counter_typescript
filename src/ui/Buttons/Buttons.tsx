@@ -1,13 +1,20 @@
 import React from "react";
 
 type Props = {
-    setIncrementCounter: (value: number) => void
+    increment: () => void
+    decrement: () => void
+    reset: () => void
 }
 
-export function Button(props: Props) {
+export function Buttons(props: Props) {
+    let { increment, decrement, reset } = props;
 
-    return(
-        <button>increment</button>
+    return (
+        <>
+            <button onClick={ increment }>increment</button>
+            <button onClick={ decrement }>decrement</button>
+            <button onClick={ reset } >reset</button>
+        </>
     )
 
 }
